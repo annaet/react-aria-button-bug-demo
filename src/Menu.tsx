@@ -24,7 +24,11 @@ export function Menu({ text }: { text: string }) {
   return (
     <div ref={ref}>
       <Button onPress={onPress}>{text}</Button>
-      {isOpen && <p style={{ border: '1px solid red' }}>Menu {text} is open!</p>}
+      {isOpen && <p style={{
+        border: '1px solid red',
+        display: 'inline',
+        margin: '1rem',
+      }}>Menu {text} is open!</p>}
     </div>
   );
 }

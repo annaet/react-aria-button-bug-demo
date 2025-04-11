@@ -1,54 +1,13 @@
-# React + TypeScript + Vite
+# React Aria / Testing Library bug demo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repo showcases a bug with the `Button` `onPress` function.
 
-Currently, two official plugins are available:
+Running the app with `npm run dev` shows two `Menu` components.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Each `Menu` component has a React ARIA `Button` and some text that is either in an open or closed state.
 
-## Expanding the ESLint configuration
+The `Menu` component listens for `pointerdown` events and when a `pointerdown` event happens outside of the component, it closes.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+When one menu is open, and a second menu is clicked. The first menu should close. This is tested via the `Menu.test.tsx` file using `userEvent.click`, and this test passes.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+However if you try to open both menus, the browser the React ARIA `Button` on the second menu swallows the `pointerdown` event and you end up with both menus being open at the same time.
